@@ -1,0 +1,34 @@
+name: Run Tests on PR
+
+on:
+  pull_request:
+    branches:
+      - master  # Change this to your main branch name if it's different
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Specify the Python version you are using
+
+      - name: Create virtual environment
+        run: |
+          python -m venv venv
+          echo "Virtual environment created."
+
+      - name: Install dependencies
+        run: |
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjust the path if necessary
+
+      - name: Run tests
+        run: |
+          python manage.py test  # Replace this with your specific test command if needed
