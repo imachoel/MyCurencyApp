@@ -152,3 +152,16 @@ In the Django admin interface, you can access the following views:
    - **URL**: `/admin/mycurrencyapp/currencyexchangerate/exchange-rate-graph/`
    - **Description**: This view provides a graphical representation of exchange rate trends over time for different currencies.
       Before accessing this view, please set the Mock provider priority to 0 (set the Mock provider as the default provider)
+
+
+## GitHub Workflows
+### 1. GitHub Workflow: on Pull Request
+GitHub workflow to automate the testing process. The workflow is configured to run tests automatically whenever a pull request (PR) is opened to the `master` branch. This ensures that all code changes are tested before being merged, helping maintain code quality and stability.
+
+The workflow includes the following steps:
+- Setting up a Python environment.
+- Creating a virtual environment.
+- Installing the project dependencies from `requirements.txt`.
+- Running the test suite.
+
+You can find the workflow configuration file in the `.github/workflows/` directory of the repository.
