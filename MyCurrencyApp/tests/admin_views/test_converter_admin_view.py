@@ -28,11 +28,14 @@ class ConverterAdminTests(TestCase):
 
     def test_converter_view_with_valid_data(self):
         # Test conversion with valid data
-        response = self.client.post(self.url, {
-            "source_currency": self.source_currency.id,
-            "target_currencies": [self.target_currency.id],
-            "amount": "100"
-        })
+        response = self.client.post(
+            self.url,
+            {
+                "source_currency": self.source_currency.id,
+                "target_currencies": [self.target_currency.id],
+                "amount": "100",
+            },
+        )
         self.assertEqual(response.status_code, 200)
         self.assertIn("conversion_result", response.context)
 
@@ -45,11 +48,14 @@ class ConverterAdminTests(TestCase):
         # Mock the exchange rate to simulate a known conversion rate
         mock_get_exchange_rate.return_value = Decimal("1.1")
 
-        response = self.client.post(self.url, {
-            "source_currency": self.source_currency.id,
-            "target_currencies": [self.target_currency.id],
-            "amount": "100"
-        })
+        response = self.client.post(
+            self.url,
+            {
+                "source_currency": self.source_currency.id,
+                "target_currencies": [self.target_currency.id],
+                "amount": "100",
+            },
+        )
         self.assertEqual(response.status_code, 200)
 
         # Verify the conversion result
@@ -59,11 +65,14 @@ class ConverterAdminTests(TestCase):
 
     def test_converter_view_same_currency(self):
         # Test conversion where source and target currencies are the same
-        response = self.client.post(self.url, {
-            "source_currency": self.source_currency.id,
-            "target_currencies": [self.source_currency.id],
-            "amount": "100"
-        })
+        response = self.client.post(
+            self.url,
+            {
+                "source_currency": self.source_currency.id,
+                "target_currencies": [self.source_currency.id],
+                "amount": "100",
+            },
+        )
         self.assertEqual(response.status_code, 200)
 
         # Verify that the converted amount equals the original amount
@@ -75,11 +84,14 @@ class ConverterAdminTests(TestCase):
         # Simulate a failure in retrieving the exchange rate
         mock_get_exchange_rate.return_value = None
 
-        response = self.client.post(self.url, {
-            "source_currency": self.source_currency.id,
-            "target_currencies": [self.target_currency.id],
-            "amount": "100"
-        })
+        response = self.client.post(
+            self.url,
+            {
+                "source_currency": self.source_currency.id,
+                "target_currencies": [self.target_currency.id],
+                "amount": "100",
+            },
+        )
         self.assertEqual(response.status_code, 200)
 
         # Verify that an error message is returned for the target currency

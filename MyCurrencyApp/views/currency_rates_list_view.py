@@ -35,7 +35,7 @@ class CurrencyRatesListView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if source_currency_code not in AvailableCurrencies.list:
+            if source_currency_code not in AvailableCurrencies.CURRENCIES:
                 return Response(
                     {"error": "Currencies not supported"},
                     status=status.HTTP_400_BAD_REQUEST,

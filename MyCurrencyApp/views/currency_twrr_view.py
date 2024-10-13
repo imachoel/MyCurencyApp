@@ -1,5 +1,4 @@
 import logging
-import traceback
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -36,8 +35,8 @@ class CurrencyTWRRView(APIView):
             )
 
         if (
-                source_currency_code not in AvailableCurrencies.list
-                and exchanged_currency_code not in AvailableCurrencies.list
+            source_currency_code not in AvailableCurrencies.CURRENCIES
+            and exchanged_currency_code not in AvailableCurrencies.CURRENCIES
         ):
             return Response(
                 {"error": "Currencies not supported"},

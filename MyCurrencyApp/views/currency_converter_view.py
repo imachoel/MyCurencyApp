@@ -27,8 +27,8 @@ class CurrencyConverterView(APIView):
             )
 
         if (
-                source_currency_code not in AvailableCurrencies().list
-                or target_currency_code not in AvailableCurrencies().list
+            source_currency_code not in AvailableCurrencies().CURRENCIES
+            or target_currency_code not in AvailableCurrencies().CURRENCIES
         ):
             return Response(
                 {"error": "Currencies not supported"},

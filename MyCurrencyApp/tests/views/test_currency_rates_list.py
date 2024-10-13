@@ -12,30 +12,28 @@ from MyCurrencyApp.tests.confest import (
     add_exchange_rate,
     delete_exchange_rate,
 )
-from MyCurrencyApp.utils import get_date_range
+from ...utils import get_date_range
 
 
 class CurrencyRatesListViewTests(APITestCase):
 
     def setUp(self):
-        # Create currencies for the tests
+        """Set up the necessary test data for the tests."""
         self.source_currency = create_source_currency("USD", "US Dollar")
         self.target_currency = create_source_currency("EUR", "Euro")
         self.provider = CurrencyProvider.objects.create(
             name="Mock", url="http://mock.url", active=True, priority=0
         )
-        self.url = reverse(
-            "currency-rates"
-        )  # Make sure this is the correct URL name for your view
+        self.url = reverse("currency-rates")
 
-    def test_missing_parameters(self):
-        # Test when required parameters are missing
+    def test_missing_required_parameters(self):
+        """Test case for handling requests with missing required parameters."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Missing required parameters", response.data["error"])
 
-    def test_unsupported_currency(self):
-        # Test when an unsupported currency is provided
+    def test_unsupported_currency_code(self):
+        """Test case for handling requests with unsupported currency codes."""
         response = self.client.get(
             self.url,
             {
@@ -49,7 +47,7 @@ class CurrencyRatesListViewTests(APITestCase):
 
     @patch("MyCurrencyApp.views.currency_rates_list_view.get_currency_rates_data")
     def test_no_exchange_rates_found(self, mock_get_currency_rates_data):
-        # Mock the function to return an empty response, simulating no rates found
+        """Test case for handling scenarios where no exchange rates are found."""
         mock_get_currency_rates_data.return_value = None
 
         response = self.client.get(
@@ -64,7 +62,8 @@ class CurrencyRatesListViewTests(APITestCase):
         self.assertIn("No rates found", response.data["error"])
 
     @patch("MyCurrencyApp.views.currency_rates_list_view.get_currency_rates_data")
-    def test_unexpected_error_handling(self, mock_get_currency_rates_data):
+    def test_handling_unexpected_errors(self, mock_get_currency_rates_data):
+        """Test case for handling unexpected errors during data retrieval."""
         mock_get_currency_rates_data.side_effect = Exception("Unexpected error")
 
         response = self.client.get(
@@ -80,7 +79,8 @@ class CurrencyRatesListViewTests(APITestCase):
             "An error occurred while processing the request.", response.data["error"]
         )
 
-    def test_successful_currency_rate_retrieval_from_mock_provider(self):
+    def test_successful_rate_retrieval_from_mock_provider(self):
+        """Test case for successful retrieval of currency rates from the mock provider."""
         response = self.client.get(
             self.url,
             {
@@ -96,15 +96,10 @@ class CurrencyRatesListViewTests(APITestCase):
 
         for currency, rates in response.data.items():
             for rate in rates:
-                # Parse the valuation_date as a datetime object
                 valuation_date = datetime.strptime(rate["valuation_date"], "%Y-%m-%d")
-
-                # Assert that the valuation_date is within the specified range
                 self.assertTrue(date_from_dt <= valuation_date <= date_to_dt)
-
-                # Assert that the rate_value is within the specified Mock Provider range (0.85 to 1.25)
                 self.assertTrue(0.85 <= rate["rate_value"] <= 1.25)
-                # Query the database for the matching exchange rate
+
                 db_rate = CurrencyExchangeRate.objects.filter(
                     source_currency__code="USD",
                     target_currency__code="EUR",
@@ -115,7 +110,8 @@ class CurrencyRatesListViewTests(APITestCase):
                     round(Decimal(rate["rate_value"]), 3), round(db_rate.rate_value, 3)
                 )
 
-    def test_successful_currency_rate_retrieval_from_db(self):
+    def test_successful_rate_retrieval_from_database(self):
+        """Test case for successful retrieval of currency rates from the database."""
         delete_exchange_rate(self.source_currency, self.target_currency)
         range_dates = get_date_range("2023-10-01", "2023-10-31")
 

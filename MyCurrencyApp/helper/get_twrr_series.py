@@ -1,9 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
-
-from ..models import Currency, CurrencyExchangeRate, CurrencyProvider
 import logging
 
+from ..models import Currency, CurrencyExchangeRate, CurrencyProvider
 from ..utils import (
     get_date_range,
     get_provider_instance,
@@ -15,32 +14,28 @@ def calculate_twrr(source_currency_code, exchanged_currency_code, amount, start_
     """
     Retrieves historical exchange rates and calculates the Time-Weighted Rate of Return (TWRR).
 
-    Parameters:
-    - source_currency_code (str): The source currency code (e.g., "USD").
-    - exchanged_currency_code (str): The exchanged currency code (e.g., "EUR").
-    - amount (float): The amount invested.
-    - start_date (str): The start date of the investment.
+    Args:
+        source_currency_code (str): The source currency code (e.g., "USD").
+        exchanged_currency_code (str): The exchanged currency code (e.g., "EUR").
+        amount (float): The amount invested.
+        start_date (str): The start date of the investment.
 
     Returns:
-    - A list of dictionaries containing historical TWRR values.
+        list: A list of dictionaries containing historical TWRR values.
     """
-    # Retrieve valuation dates from start_date until today
     valuation_dates = get_date_range(start_date, datetime.today().strftime("%Y-%m-%d"))
 
-    # Query existing historical rates from the database
     existing_rates = CurrencyExchangeRate.objects.filter(
         source_currency__code=source_currency_code,
         target_currency__code=exchanged_currency_code,
         valuation_date__gte=start_date,
     ).order_by("valuation_date")
 
-    # Prepare data for calculating TWRR
     existing_dates = set(
         rate.valuation_date.strftime("%Y-%m-%d") for rate in existing_rates
     )
     missing_dates = [date for date in valuation_dates if date not in existing_dates]
 
-    # If any dates are missing, fetch rates from providers
     if missing_dates:
         new_rates = _fetch_and_save_from_providers(
             source_currency_code, exchanged_currency_code, missing_dates
@@ -73,17 +68,24 @@ def calculate_twrr(source_currency_code, exchanged_currency_code, amount, start_
             }
         )
 
-        # Update previous rate value for the next iteration
         previous_rate_value = rate_value
 
     return twrr_series
 
 
 def _fetch_and_save_from_providers(
-        source_currency_code, exchanged_currency_code, missing_dates
+    source_currency_code, exchanged_currency_code, missing_dates
 ):
     """
     Fetches and saves exchange rates for missing dates from providers and returns the new rates.
+
+    Args:
+        source_currency_code (str): The source currency code.
+        exchanged_currency_code (str): The exchanged currency code.
+        missing_dates (list): List of dates for which exchange rates are missing.
+
+    Returns:
+        list: A list of new CurrencyExchangeRate objects representing the newly fetched rates.
     """
     source_currency = Currency.objects.get(code=source_currency_code)
     target_currency = Currency.objects.get(code=exchanged_currency_code)

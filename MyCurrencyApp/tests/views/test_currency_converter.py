@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 from decimal import Decimal
 from unittest.mock import patch
 
-from ...models import CurrencyProvider, CurrencyExchangeRate
+from MyCurrencyApp.models import CurrencyExchangeRate, CurrencyProvider
 from MyCurrencyApp.tests.confest import (
     create_source_currency,
     add_exchange_rate,
@@ -15,7 +15,6 @@ from MyCurrencyApp.tests.confest import (
 
 
 class CurrencyConverterViewTests(APITestCase):
-
     def setUp(self):
         self.provider = CurrencyProvider.objects.create(
             name="Mock", url="http://mock.url", active=True, priority=0
@@ -24,19 +23,16 @@ class CurrencyConverterViewTests(APITestCase):
         self.target_currency = create_source_currency("EUR", "Euro")
         self.rate_value = Decimal("1.09")
 
-        # Define the base URL for your API
-        self.url = reverse(
-            "currency-converter"
-        )  # Use the correct URL name for your view
+        self.url = reverse("currency-converter")
 
-    def test_missing_required_parameters(self):
-        # Test with missing parameters
+    def test_missing_parameters(self):
+        """Test case for missing required parameters in the request."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Missing required parameters", response.data["error"])
 
-    def test_currencies_not_supported(self):
-        # Test with unsupported currency codes
+    def test_unsupported_currencies(self):
+        """Test case for unsupported currency codes in the request."""
         response = self.client.get(
             self.url,
             {"source_currency": "ABC", "target_currency": "XYZ", "amount": "100"},
@@ -44,8 +40,8 @@ class CurrencyConverterViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Currencies not supported", response.data["error"])
 
-    def test_invalid_amount_format(self):
-        # Test with invalid amount format
+    def test_invalid_amount(self):
+        """Test case for invalid amount format in the request."""
         response = self.client.get(
             self.url,
             {"source_currency": "USD", "target_currency": "EUR", "amount": "invalid"},
@@ -54,7 +50,7 @@ class CurrencyConverterViewTests(APITestCase):
         self.assertIn("Invalid amount format", response.data["error"])
 
     def test_negative_amount(self):
-        # Test with negative amount
+        """Test case for negative amount in the request."""
         response = self.client.get(
             self.url,
             {"source_currency": "USD", "target_currency": "EUR", "amount": "-100"},
@@ -62,11 +58,9 @@ class CurrencyConverterViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Amount must be greater than zero", response.data["error"])
 
-    @patch(
-        "MyCurrencyApp.helper.get_create_exchange_rate.get_or_create_exchange_rate"
-    )  # Mock the function that fetches the exchange rate
-    def test_exchange_rate_not_available(self, mock_get_exchange_rate):
-        # Simulate exchange rate not available
+    @patch("MyCurrencyApp.helper.get_create_exchange_rate.get_or_create_exchange_rate")
+    def test_exchange_rate_not_found(self, mock_get_exchange_rate):
+        """Test case for handling the situation when the exchange rate is not available."""
         mock_get_exchange_rate.return_value = None
         response = self.client.get(
             self.url,
@@ -74,8 +68,8 @@ class CurrencyConverterViewTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_successful_currency_conversion_from_db(self):
-        # Simulate a valid exchange rate
+    def test_successful_conversion_from_database(self):
+        """Test case for successful currency conversion using an exchange rate from the database."""
         add_exchange_rate(
             self.source_currency, self.target_currency, self.provider, rate_value=1.09
         )
@@ -95,7 +89,8 @@ class CurrencyConverterViewTests(APITestCase):
 
         delete_exchange_rate(self.source_currency, self.target_currency)
 
-    def test_successful_currency_conversion_from_provider(self):
+    def test_successful_conversion_from_provider(self):
+        """Test case for successful currency conversion using an exchange rate from the provider."""
         delete_exchange_rate(self.source_currency, self.target_currency)
         response = self.client.get(
             self.url,
@@ -110,7 +105,6 @@ class CurrencyConverterViewTests(APITestCase):
             <= response.data["converted_amount"]
             <= Decimal("100") * Decimal("1.25")
         )
-        # Test that it has been updated with the latest exchange rate
         db_rate = CurrencyExchangeRate.objects.filter(
             source_currency__code="USD", target_currency__code="EUR", active=True
         ).first()
@@ -123,12 +117,9 @@ class CurrencyConverterViewTests(APITestCase):
             == db_rate.valuation_date.strftime("%Y-%m-%d")
         )
 
-    @patch(
-        "MyCurrencyApp.views.currency_converter_view.get_or_create_exchange_rate"
-    )  # Mock the function that fetches the exchange rate
-    def test_successful_currency_conversion_from_provider_if_database_rate_value_not_from_today(
-            self, mock_get_exchange_rate
-    ):
+    @patch("MyCurrencyApp.views.currency_converter_view.get_or_create_exchange_rate")
+    def test_conversion_when_db_rate_is_stale(self, mock_get_exchange_rate):
+        """Test case for conversion when the database rate is not from today."""
         add_exchange_rate(
             self.source_currency,
             self.target_currency,

@@ -11,8 +11,16 @@ from ..utils import get_provider_instance, update_exchange_rate_activity
 
 def get_or_create_exchange_rate(source_currency_code, target_currency_code):
     """
-    Gets or creates the latest exchange rate between the source and target currencies.
-    If the rate is not found in the database, fetch it from the provider and save it.
+    Retrieves the latest exchange rate between the source and target currencies.
+    If the exchange rate is not available in the database, it attempts to fetch it
+    from an active currency provider. The rate is then saved in the database.
+
+    Args:
+        source_currency_code (str): The code of the source currency.
+        target_currency_code (str): The code of the target currency.
+
+    Returns:
+        Decimal or None: The exchange rate if found or fetched successfully, otherwise None.
     """
     source_currency = Currency.objects.get(code=source_currency_code)
     target_currency = Currency.objects.get(code=target_currency_code)
@@ -40,12 +48,11 @@ def get_or_create_exchange_rate(source_currency_code, target_currency_code):
                 rates = data.get("rates", [])
                 rate_value = rates[target_currency.code]
                 if rate_value:
-                    valuation_date = datetime.now().strftime("%Y-%m-%d")
                     update_exchange_rate_activity(
                         source_currency,
                         target_currency,
                         rate_value,
-                        valuation_date,
+                        datetime.now(),
                         provider,
                     )
                     return round(Decimal(rate_value), 3)

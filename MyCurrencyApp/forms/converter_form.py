@@ -16,10 +16,6 @@ class CurrencyConverterForm(forms.Form):
 
 
 class CurrencyExchangeRateForm(forms.ModelForm):
-    """
-    A form for creating and editing CurrencyExchangeRate objects. This form is used
-    in the Django admin and ensures that necessary fields are presented properly.
-    """
 
     class Meta:
         model = CurrencyExchangeRate
@@ -32,7 +28,7 @@ class CurrencyExchangeRateForm(forms.ModelForm):
             "provider",
         ]
         widgets = {
-            "valuation_date": forms.SelectDateWidget(),  # A calendar widget for valuation date
+            "valuation_date": forms.SelectDateWidget(),
             "rate_value": forms.NumberInput(attrs={"step": "0.000001"}),
         }
 

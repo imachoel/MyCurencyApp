@@ -6,7 +6,7 @@ class BaseProvider:
         self.base_currency = provider_model.default_base_currency
 
     def get_exchange_rate_data(
-            self, source_currency, exchanged_currency, valuation_date
+        self, source_currency, exchanged_currency, valuation_date
     ):
         """
         Abstract method to be implemented by subclasses.
