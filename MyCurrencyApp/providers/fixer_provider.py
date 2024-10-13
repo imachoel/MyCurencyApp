@@ -1,6 +1,4 @@
 import logging
-import traceback
-
 import requests
 from .base_provider import BaseProvider
 from ..enums.available_currencies import AvailableCurrencies
@@ -11,7 +9,7 @@ class FixerProvider(BaseProvider):
         super().__init__(provider_model, url)
 
     def get_exchange_rate_data(
-            self, source_currency, exchanged_currency, valuation_date
+        self, source_currency, exchanged_currency, valuation_date
     ):
         """
         Get the exchange rate from Fixer API.
@@ -21,7 +19,7 @@ class FixerProvider(BaseProvider):
             "symbols": (
                 exchanged_currency
                 if exchanged_currency
-                else ",".join(AvailableCurrencies().list)
+                else ",".join(AvailableCurrencies.CURRENCIES)
             ),
             "access_key": self.api_key,
         }
@@ -34,7 +32,7 @@ class FixerProvider(BaseProvider):
                 logging.warning(
                     f"Provider only supports {self.base_currency} as base. Adjusting rates for {source_currency}."
                 )
-                params["symbols"] = ",".join(AvailableCurrencies().list)
+                params["symbols"] = ",".join(AvailableCurrencies.CURRENCIES)
                 data = self.get_adjusted_rates(source_currency, params)
 
                 return {
@@ -63,7 +61,6 @@ class FixerProvider(BaseProvider):
         Returns:
             dict: A dictionary of rates adjusted to the desired base currency.
         """
-
         try:
             params["base"] = self.base_currency
             response = requests.get(self.url, params=params, timeout=self.timeout)

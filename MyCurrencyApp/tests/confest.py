@@ -1,6 +1,5 @@
-from datetime import datetime
 import random
-
+from datetime import datetime
 from MyCurrencyApp.models import Currency, CurrencyExchangeRate
 
 
@@ -9,7 +8,7 @@ def create_source_currency(code, name):
 
 
 def add_exchange_rate(
-        source_currency, target_currency, provider, rate_value=None, valuation_date=None
+    source_currency, target_currency, provider, rate_value=None, valuation_date=None
 ):
     if not rate_value:
         rate_value = random.uniform(0.85, 1.25)

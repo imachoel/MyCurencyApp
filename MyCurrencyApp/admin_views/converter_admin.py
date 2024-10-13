@@ -3,13 +3,22 @@ from django.urls import path
 from django.shortcuts import render
 from django.contrib import admin
 from ..forms.converter_form import CurrencyConverterForm
-
 from ..helper.get_create_exchange_rate import get_or_create_exchange_rate
 
 
 class ConverterAdmin(admin.ModelAdmin):
+    """
+    Custom admin interface for the currency converter feature.
+    Adds a custom URL for accessing the currency conversion view.
+    """
 
     def get_urls(self):
+        """
+        Extends the default admin URLs with a custom URL for the currency converter view.
+
+        Returns:
+            list: A list of URL patterns including the custom converter view.
+        """
         urls = super().get_urls()
         custom_urls = [
             path(
@@ -21,6 +30,16 @@ class ConverterAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def converter_view(self, request):
+        """
+        Handles requests to the custom currency converter view.
+        Displays a form for currency conversion and processes the conversion logic.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The rendered template with the conversion form and result.
+        """
         form = CurrencyConverterForm(request.POST or None)
         conversion_result = None
 

@@ -9,14 +9,14 @@
     <div class="container">
         <link rel="stylesheet" href="{% static 'styles.css' %}">
 
-        <h1 style="color:black; font-weight: bold; text-align:center; font-size:24px">Currency Converter</h1>
+        <h1 class="header">Currency Converter</h1>
 
-        <div class="box" style="justify-content: center; align-items: center; display:flex">
+        <div class="box">
             <form method="POST" class="form">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="id_source_currency"
-                           style="color:black; font-weight: bold; padding-right: 5%;font-size:18px">Source
+                           class="currency-header">Source
                         Currency:</label>
                     {{ form.source_currency }}
                     {{ form.non_field_errors }}
@@ -24,7 +24,7 @@
 
                 <div class="form-group" style="padding-top:4%">
                     <label for="id_target_currencies"
-                           style="color:black; font-weight: bold; padding-right: 5%;font-size:18px">Target
+                           class="currency-header">Target
                         Currencies:</label>
                     <div class="checkbox-group" style="padding-top:5%; ">
                         {% for currency in form.target_currencies %}
@@ -39,13 +39,13 @@
 
                 <div class="form-group" style="padding-top:5%; font-size: 18px">
                     <label for="id_amount"
-                           style="color:black; font-weight: bold; padding-right: 5%;font-size:18px">{{ form.amount.label }}</label>
+                           style="color:white; font-weight: bold; padding-right: 5%;font-size:18px">{{ form.amount.label }}</label>
                     {{ form.amount }}
                 </div>
 
                 <div class="form-actions" style="padding-top: 5%;">
                     <button type="submit" class="btn btn-primary"
-                            style="background: black;color:white;width:40%;font-size:16px">Convert
+                            class="button">Convert
                     </button>
                 </div>
             </form>
@@ -53,10 +53,10 @@
 
         {% if conversion_result %}
             <div style="justify-content:center;align-items: center;display:flex;padding-top:2%">
-                <h2 class="subtitle" style="color:black; font-weight: bold; padding-right: 5%;font-size:18px">Conversion
+                <h2 class="subtitle">Conversion
                     Results</h2>
             </div>
-            <div class="box" style="justify-content:center;align-items: center;display:flex">
+            <div class="box" >
                 <table class="table">
                     <thead>
                     <tr>

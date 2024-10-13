@@ -53,8 +53,8 @@
         let startDate = luxon.DateTime.local().minus({years: 1}).toISODate();  // Start date from 1 year ago
 
 
-        let maxDataPoints = 20;  // Limit the number of points shown on the graph
-        let batchSize = 20;       // Number of days per batch
+        let maxDataPoints = 10;  // Limit the number of points shown on the graph
+        let batchSize = 10;       // Number of days per batch
 
         function fetchExchangeRateData() {
             // Calculate the end date by adding batchSize days to the start date
@@ -65,19 +65,16 @@
                 .then(data => {
                     const chartData = data.data;  // Accessing formatted chart data directly
 
-                    // Process labels (dates)
                     chartData.labels.forEach(label => {
-                        // Shift old labels to maintain the time-series feel
                         if (exchangeRateChart.data.labels.length >= maxDataPoints) {
-                            exchangeRateChart.data.labels.shift();  // Remove the first (oldest) label
+                            exchangeRateChart.data.labels.shift();
                         }
-                        exchangeRateChart.data.labels.push(label);  // Add the new label
+                        exchangeRateChart.data.labels.push(label);
                     });
 
                     // Process datasets and update them
                     chartData.datasets.forEach((newDataset, index) => {
                         if (!exchangeRateChart.data.datasets[index]) {
-                            // If dataset doesn't exist, create it
                             exchangeRateChart.data.datasets[index] = {
                                 label: newDataset.label,
                                 data: [],
@@ -88,18 +85,15 @@
 
                         // Update the dataset
                         newDataset.data.forEach(value => {
-                            // Shift old data points to maintain the time-series feel
                             if (exchangeRateChart.data.datasets[index].data.length >= maxDataPoints) {
-                                exchangeRateChart.data.datasets[index].data.shift();  // Remove the first (oldest) data point
+                                exchangeRateChart.data.datasets[index].data.shift();
                             }
-                            exchangeRateChart.data.datasets[index].data.push(value);  // Add the new data point
+                            exchangeRateChart.data.datasets[index].data.push(value);
                         });
                     });
 
-                    // Animate and update the chart with the new data
-                    exchangeRateChart.update('none');  // Disable default animation for smooth transition
+                    exchangeRateChart.update('none');
 
-                    // Update start date based on the last label in the data
                     if (chartData.labels.length > 0) {
                         startDate = chartData.labels[chartData.labels.length - 1];
                     }

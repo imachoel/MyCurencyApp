@@ -1,2 +1,2 @@
 class AvailableCurrencies:
-    list = ["EUR", "CHF", "USD", "GBP"]
+    CURRENCIES = ["EUR", "CHF", "USD", "GBP"]

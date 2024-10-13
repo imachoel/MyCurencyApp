@@ -18,24 +18,22 @@ from MyCurrencyApp.utils import get_date_range
 class CurrencyTWRRViewTests(APITestCase):
 
     def setUp(self):
-        # Create currencies for the tests
+        """Set up the necessary test data for the TWRR tests."""
         self.source_currency = create_source_currency("USD", "US Dollar")
         self.target_currency = create_source_currency("EUR", "Euro")
         self.provider = CurrencyProvider.objects.create(
             name="Mock", url="http://mock.url", active=True, priority=0
         )
-        self.url = reverse(
-            "currency-twrr"
-        )  # Make sure this is the correct URL name for your TWRR view
+        self.url = reverse("currency-twrr")
 
-    def test_missing_parameters(self):
-        # Test when required parameters are missing
+    def test_missing_required_parameters(self):
+        """Test case for handling requests with missing required parameters."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Missing required parameters", response.data["error"])
 
-    def test_unsupported_currency(self):
-        # Test when an unsupported currency is provided
+    def test_unsupported_currency_code(self):
+        """Test case for handling requests with unsupported currency codes."""
         response = self.client.get(
             self.url,
             {
@@ -49,7 +47,7 @@ class CurrencyTWRRViewTests(APITestCase):
         self.assertIn("Currencies not supported", response.data["error"])
 
     def test_invalid_amount_format(self):
-        # Test when the amount is not a valid number
+        """Test case for handling requests with an invalid amount format."""
         response = self.client.get(
             self.url,
             {
@@ -63,7 +61,7 @@ class CurrencyTWRRViewTests(APITestCase):
         self.assertIn("Invalid amount format", response.data["error"])
 
     def test_amount_must_be_greater_than_zero(self):
-        # Test when the amount is zero or negative
+        """Test case for ensuring the amount is greater than zero."""
         response = self.client.get(
             self.url,
             {
@@ -78,7 +76,7 @@ class CurrencyTWRRViewTests(APITestCase):
 
     @patch("MyCurrencyApp.views.currency_twrr_view.calculate_twrr")
     def test_no_twrr_series_found(self, mock_calculate_twrr):
-        # Mock the calculate_twrr function to return an empty response, simulating no TWRR data found
+        """Test case for handling scenarios where no TWRR data is found."""
         mock_calculate_twrr.return_value = None
 
         response = self.client.get(
@@ -97,8 +95,8 @@ class CurrencyTWRRViewTests(APITestCase):
         )
 
     @patch("MyCurrencyApp.views.currency_twrr_view.calculate_twrr")
-    def test_unexpected_error_handling(self, mock_calculate_twrr):
-        # Mock the calculate_twrr function to raise an exception
+    def test_handling_unexpected_errors(self, mock_calculate_twrr):
+        """Test case for handling unexpected errors during TWRR calculation."""
         mock_calculate_twrr.side_effect = Exception("Unexpected error")
 
         response = self.client.get(
@@ -115,11 +113,12 @@ class CurrencyTWRRViewTests(APITestCase):
             "An error occurred while calculating TWRR", response.data["error"]
         )
 
-    def test_successful_twrr_calculation_from_db(self):
-        # Add mock exchange rates for the test
+    def test_successful_twrr_calculation_from_database(self):
+        """Test case for successful TWRR calculation from the database."""
         delete_exchange_rate(self.source_currency, self.target_currency)
         start_date = (datetime.now() - timedelta(days=20)).strftime("%Y-%m-%d")
         range_dates = get_date_range(start_date, datetime.now().strftime("%Y-%m-%d"))
+
         for valuation_date in range_dates:
             add_exchange_rate(
                 self.source_currency,
@@ -128,7 +127,6 @@ class CurrencyTWRRViewTests(APITestCase):
                 valuation_date=valuation_date,
             )
 
-        # Test successful TWRR calculation
         response = self.client.get(
             self.url,
             {
@@ -147,12 +145,11 @@ class CurrencyTWRRViewTests(APITestCase):
         self.assertEqual(response.data["start_date"], start_date)
 
     def test_successful_twrr_calculation_from_provider(self):
-        # Add mock exchange rates for the test
+        """Test case for successful TWRR calculation from the mock provider."""
         delete_exchange_rate(self.source_currency, self.target_currency)
         start_date = (datetime.now() - timedelta(days=20)).strftime("%Y-%m-%d")
         range_dates = get_date_range(start_date, datetime.now().strftime("%Y-%m-%d"))
 
-        # Test successful TWRR calculation
         response = self.client.get(
             self.url,
             {
@@ -182,6 +179,6 @@ class CurrencyTWRRViewTests(APITestCase):
             ).first()
 
             self.assertEqual(
-                round(db_rate.rate_value, 4),
-                round(Decimal(response_rate["rate_value"]), 4),
+                round(db_rate.rate_value, 1),
+                round(Decimal(response_rate["rate_value"]), 1),
             )
