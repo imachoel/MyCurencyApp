@@ -31,4 +31,5 @@ jobs:
 
       - name: Run tests
         run: |
+          source venv/bin/activate
           python manage.py test  # Replace this with your specific test command if needed
