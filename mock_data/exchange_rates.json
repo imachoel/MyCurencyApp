@@ -1,0 +1,302 @@
+[
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-01-01",
+        "rate_value": 1.011705
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-02-04",
+        "rate_value": 1.23776
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "GBP",
+        "valuation_date": "2023-11-15",
+        "rate_value": 1.066017
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "EUR",
+        "valuation_date": "2023-12-10",
+        "rate_value": 1.152508
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-07-19",
+        "rate_value": 0.920538
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-09-26",
+        "rate_value": 0.999548
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-08-04",
+        "rate_value": 1.227252
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "CHF",
+        "valuation_date": "2023-12-18",
+        "rate_value": 1.068368
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-04-09",
+        "rate_value": 0.924052
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "GBP",
+        "valuation_date": "2023-10-21",
+        "rate_value": 0.997352
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-07-11",
+        "rate_value": 0.861173
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-06-15",
+        "rate_value": 1.202781
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "CHF",
+        "valuation_date": "2023-11-07",
+        "rate_value": 1.10982
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-07-26",
+        "rate_value": 1.144968
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-10-01",
+        "rate_value": 1.215992
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-06-04",
+        "rate_value": 0.97702
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "GBP",
+        "valuation_date": "2024-05-09",
+        "rate_value": 1.182163
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-07-03",
+        "rate_value": 1.099065
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "EUR",
+        "valuation_date": "2023-11-04",
+        "rate_value": 1.020361
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-01-22",
+        "rate_value": 0.857181
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-03-14",
+        "rate_value": 1.023194
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "EUR",
+        "valuation_date": "2023-10-23",
+        "rate_value": 1.026712
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "EUR",
+        "valuation_date": "2023-11-09",
+        "rate_value": 0.950611
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-07-19",
+        "rate_value": 0.883279
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-01-17",
+        "rate_value": 1.176803
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-07-14",
+        "rate_value": 0.881325
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-09-04",
+        "rate_value": 1.214688
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-08-15",
+        "rate_value": 1.110739
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-09-24",
+        "rate_value": 0.900413
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-05-25",
+        "rate_value": 0.864785
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "GBP",
+        "valuation_date": "2024-09-20",
+        "rate_value": 1.103261
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "GBP",
+        "valuation_date": "2023-10-27",
+        "rate_value": 0.857011
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-06-29",
+        "rate_value": 0.962051
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2023-10-14",
+        "rate_value": 0.862535
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-04-11",
+        "rate_value": 1.11122
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-09-29",
+        "rate_value": 0.95138
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-07-24",
+        "rate_value": 1.005362
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "GBP",
+        "valuation_date": "2024-09-03",
+        "rate_value": 1.243535
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-03-21",
+        "rate_value": 1.036432
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "USD",
+        "valuation_date": "2023-11-03",
+        "rate_value": 1.074058
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-09-21",
+        "rate_value": 1.12672
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "EUR",
+        "valuation_date": "2024-04-22",
+        "rate_value": 0.935227
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "GBP",
+        "valuation_date": "2024-07-28",
+        "rate_value": 0.963514
+    },
+    {
+        "source_currency_code": "USD",
+        "target_currency_code": "CHF",
+        "valuation_date": "2024-07-18",
+        "rate_value": 1.124351
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-09-17",
+        "rate_value": 1.096961
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-09-26",
+        "rate_value": 1.152838
+    },
+    {
+        "source_currency_code": "GBP",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-04-11",
+        "rate_value": 0.896309
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "GBP",
+        "valuation_date": "2024-08-20",
+        "rate_value": 1.236147
+    },
+    {
+        "source_currency_code": "CHF",
+        "target_currency_code": "GBP",
+        "valuation_date": "2024-03-19",
+        "rate_value": 1.114237
+    },
+    {
+        "source_currency_code": "EUR",
+        "target_currency_code": "USD",
+        "valuation_date": "2024-03-26",
+        "rate_value": 0.976367
+    }
+]

@@ -1,0 +1,125 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Exchange Rate Graph</h1>
+    <div>
+        <canvas id="exchangeRateChart" width="300" height="100"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@1.8.2/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.1.0"></script>
+    <script>
+
+        let intervalId;
+
+        const ctx = document.getElementById('exchangeRateChart').getContext('2d');
+        const exchangeRateChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Exchange Rate Time Evolution'
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            tooltipFormat: 'yyyy-MM-dd',
+                            displayFormats: {
+                                day: 'yyyy-MM-dd'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Valuation Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Exchange Rate'
+                        }
+                    }
+                }
+            }
+        });
+
+        let startDate = luxon.DateTime.local().minus({years: 1}).toISODate();  // Start date from 1 year ago
+
+
+        let maxDataPoints = 20;  // Limit the number of points shown on the graph
+        let batchSize = 20;       // Number of days per batch
+
+        function fetchExchangeRateData() {
+            // Calculate the end date by adding batchSize days to the start date
+            const endDate = luxon.DateTime.fromISO(startDate).plus({days: batchSize}).toISODate();
+
+            fetch(`/admin/MyCurrencyApp/currencyexchangerate/exchange-rate-all-currencies/?start_date=${startDate}&end_date=${endDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    const chartData = data.data;  // Accessing formatted chart data directly
+
+                    // Process labels (dates)
+                    chartData.labels.forEach(label => {
+                        // Shift old labels to maintain the time-series feel
+                        if (exchangeRateChart.data.labels.length >= maxDataPoints) {
+                            exchangeRateChart.data.labels.shift();  // Remove the first (oldest) label
+                        }
+                        exchangeRateChart.data.labels.push(label);  // Add the new label
+                    });
+
+                    // Process datasets and update them
+                    chartData.datasets.forEach((newDataset, index) => {
+                        if (!exchangeRateChart.data.datasets[index]) {
+                            // If dataset doesn't exist, create it
+                            exchangeRateChart.data.datasets[index] = {
+                                label: newDataset.label,
+                                data: [],
+                                borderColor: newDataset.borderColor,
+                                fill: false
+                            };
+                        }
+
+                        // Update the dataset
+                        newDataset.data.forEach(value => {
+                            // Shift old data points to maintain the time-series feel
+                            if (exchangeRateChart.data.datasets[index].data.length >= maxDataPoints) {
+                                exchangeRateChart.data.datasets[index].data.shift();  // Remove the first (oldest) data point
+                            }
+                            exchangeRateChart.data.datasets[index].data.push(value);  // Add the new data point
+                        });
+                    });
+
+                    // Animate and update the chart with the new data
+                    exchangeRateChart.update('none');  // Disable default animation for smooth transition
+
+                    // Update start date based on the last label in the data
+                    if (chartData.labels.length > 0) {
+                        startDate = chartData.labels[chartData.labels.length - 1];
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching exchange rate data:', error);
+                });
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        intervalId = setInterval(fetchExchangeRateData, 3000);
+        fetchExchangeRateData();
+
+    </script>
+{% endblock %}
