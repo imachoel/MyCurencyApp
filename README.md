@@ -89,21 +89,50 @@ python manage.py runserver
 
   - `source_currency (str)`: The base currency code.
   - `date_from (str)`: Start date of the period in YYYY-MM-DD format.
-  - `date_to (str)`: End date of the period in YYYY-MM-DD format._
-  Response:
+  - `date_to (str)`: End date of the period in YYYY-MM-DD format.
 
-- **Success (200)**: Returns a dictionary with date keys and exchange rate values.
+- **Response**:
+
+  - **Success (200)**: Returns a dictionary with date keys and exchange rate values.
 
     ```
     {
-        "2024-01-01": 0.85,
-        "2024-01-02": 0.86
-    }
+    "CHF": [
+        {
+            "rate_value": 1.116767,
+            "valuation_date": "2024-09-01"
+        },
+        {
+            "rate_value": 1.118897,
+            "valuation_date": "2024-09-02"
+        },
+    ],
+    "EUR": [
+        {
+            "rate_value": 1.188606,
+            "valuation_date": "2024-09-01"
+        },
+        {
+            "rate_value": 1.187417,
+            "valuation_date": "2024-09-02"
+        },
+    ],
+    "USD": [
+        {
+            "rate_value": 1.312767,
+            "valuation_date": "2024-09-01"
+        },
+        {
+            "rate_value": 1.31414,
+            "valuation_date": "2024-09-02"
+        },
+    ]
+}
     ```
 
-- **Error (400)**: Returns an error message for missing parameters or unsupported currencies.
-- **Error (404)**: No exchange rates found for the given period.
-- **Error (500)**: Server error.
+ - **Error (400)**: Returns an error message for missing parameters or unsupported currencies.
+ - **Error (404)**: No exchange rates found for the given period.
+ - **Error (500)**: Server error.
 
 ### 3. Currency TWRR API
 
@@ -122,23 +151,33 @@ python manage.py runserver
 
 - **Response**:
 
-- **Success (200)**: Returns a time series of TWRR values.
-    ```
-    {
-        "source_currency": "USD",
-        "exchanged_currency": "EUR",
-        "amount_invested": 1000,
-        "start_date": "2024-01-01",
-        "twrr_series": [
-            {"date": "2024-01-02", "twrr": 0.85},
-            {"date": "2024-01-03", "twrr": 0.86}
-        ]
+ - **Success (200)**: Returns a time series of TWRR values.
+   ```
+     {
+     "source_currency": "CHF",
+     "exchanged_currency": "GBP",
+     "amount_invested": 250.0,
+     "start_date": "2024-09-08",
+     "twrr_series": [
+         {
+             "valuation_date": "2024-09-08",
+             "rate_value": 0.902263,
+             "twrr": 0,
+             "amount": 225.56575
+         },
+         {
+             "valuation_date": "2024-09-08",
+             "rate_value": 1.139027,
+             "twrr": 0.2624112924945387,
+             "amount": 284.75675
+         },
+     ]
     }
-    ```
+   ```
 
-- **Error (400)**: Returns an error message for missing parameters, unsupported currencies, or invalid amount format.
-- **Error (404)**: No historical exchange rates found.
-- **Error (500)**: Server error.
+ - **Error (400)**: Returns an error message for missing parameters, unsupported currencies, or invalid amount format.
+ - **Error (404)**: No historical exchange rates found.
+ - **Error (500)**: Server error.
 
 ## Admin Access
 
