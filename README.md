@@ -74,9 +74,9 @@ python manage.py runserver
         "converted_amount": 85.00
     }
     ```
-    - Error (400): Returns an error message for missing parameters, unsupported currencies, or invalid amount.
-    - Error (404): Exchange rate not found.
-    - Error (500): Server error.
+  - Error (400): Returns an error message for missing parameters, unsupported currencies, or invalid amount.
+  - Error (404): Exchange rate not found.
+  - Error (500): Server error.
 
 ### 2. Currency Rates List API
 - **Endpoint**: /api/currency-rates/
@@ -95,7 +95,7 @@ python manage.py runserver
 
   - **Success (200)**: Returns a dictionary with date keys and exchange rate values.
 
-    ```
+  ```
     {
     "CHF": [
         {
@@ -127,8 +127,8 @@ python manage.py runserver
             "valuation_date": "2024-09-02"
         },
     ]
-}
-    ```
+    }
+   ```
 
  - **Error (400)**: Returns an error message for missing parameters or unsupported currencies.
  - **Error (404)**: No exchange rates found for the given period.
